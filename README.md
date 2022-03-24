@@ -1,5 +1,5 @@
 # SkynetWizard
-Download and upload files easily
+Download or upload files easily to the Ethereum network
 
 ```
 Max upload files size: 1GB
