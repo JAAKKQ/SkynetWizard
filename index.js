@@ -49,22 +49,6 @@ module.exports = function (init) {
     init = init;
 
     return {
-        upload: function (LocalDir, cb) {
-            AchiveFile(LocalDir, function () {
-                (async () => {
-                    const url = await client.uploadFile(RootFolder + '/cache.zip');
-                    cb(url);
-                })();
-            });
-        },
-        download: function (InternetDir, cb) {
-            (async () => {
-                const skylink = InternetDir;
-                await client.downloadFile("data.zip", skylink);
-                await extract("data.zip", { dir: path.resolve('.') })
-                console.log('Download successful');
-            })();
-        },
         start: function () {
             StartWizard();
         }
@@ -75,14 +59,18 @@ function StartWizard() {
     console.log('\x1b[32m%s\x1b[0m', '--------------/ Welcome to the dungeon! \--------------');
     rl.question('Upload or download? u/d: ', function (result) {
         if (result === 'u') {
+            console.log('Current path: ' + path.resolve("./"));
             rl.question('What file or directory do you want to upload to The Internet: ', function (LocalDir) {
                 if (fs.existsSync(LocalDir)) {
                     console.log('Starting uploading...');
                     AchiveFile(LocalDir, function () {
                         (async () => {
-                            const url = await client.uploadFile(RootFolder + '/cache.zip');
+                            const url = await client.uploadFile('./cache.zip');
                             console.log(`Upload successful!`);
-                            console.log('\x1b[32m%s\x1b[0m', `URL: ${url}`);
+                            console.log('\x1b[44m%s\x1b[0m', `URL: ${url}`);
+                            if (fs.existsSync('./cache.zip')){
+                                fs.unlinkSync('./cache.zip');
+                            };
                             StartWizard();
                         })();
                     });
@@ -93,13 +81,17 @@ function StartWizard() {
             });
         } else {
             rl.question('Enter the SIA URL: sia://', function (InternetDir) {
-                rl.question('Where would you like to save this file?', function (Dest) {
+                console.log('Current path: ' + path.resolve("./"));
+                rl.question('Where would you like to save this file: ', function (Dest) {
                     (async () => {
                         const skylink = InternetDir;
-                        await client.downloadFile("data.zip", skylink);
+                        await client.downloadFile("./data123321.zip", skylink);
                         console.log('Download successful');
-                        await extract("data.zip", { dir: path.resolve(Dest) })
+                        await extract("./data123321.zip", { dir: path.resolve(Dest) })
                         console.log('Extraction complete');
+                        if (fs.existsSync('./data123321.zip')){
+                            fs.unlinkSync('./data123321.zip');
+                        };
                         StartWizard();
                     })();
                 });
