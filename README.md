@@ -1,5 +1,5 @@
 # SkynetWizard
-Download or upload files easily to the Ethereum network
+Download or upload files easily to the Sia network
 
 ```
 Max upload files size: 1GB
